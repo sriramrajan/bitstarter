@@ -9,7 +9,7 @@ var mydata = "";
 var mydata = fs.readFileSync('index.html');
 
 app.get('/', function(request, response) {
-  response.send(mydata);
+  response.send(mydata.toString());
 });
 
 var port = process.env.PORT || 5000;
