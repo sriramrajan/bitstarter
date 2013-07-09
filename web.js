@@ -2,11 +2,13 @@ var express = require('express');
 
 var app = express.createServer(express.logger());
 
-var fs = require('fs')
+var fs = require('fs');
 
-var mydata = ""
+var mydata = "";
 
-var filedata = fs.readFile('index.html', mydata);
+var mydata = fs.readFileSync('index.html');
+
+console.log(mydata.toString());
 
 app.get('/', function(request, response) {
   response.send(mydata);
