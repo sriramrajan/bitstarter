@@ -8,8 +8,6 @@ var mydata = "";
 
 var mydata = fs.readFileSync('index.html');
 
-console.log(mydata.toString());
-
 app.get('/', function(request, response) {
   response.send(mydata);
 });
