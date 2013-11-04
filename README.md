@@ -1,105 +1,64 @@
 bitstarter
-==========
+=====
 
-# Program to code up Greedy solution
+Problem 1:
+<code>
+#!/usr/bin/python
+#@author Sriram Rajan
+#@Problem Merchant's Guide to Galaxy
+from collections import namedtuple
+import sys
 
-from sys import argv
+class Symbols:
+    def __init__(self):
+        self.symblRec = namedtuple('symblRec', 'name value repeats substracts')
+        self.symDict = {}
+        self.nameDict = {}
+        self.symDict['I'] = self.symblRec(None, 1, 3, None)
+        self.symDict['V'] = self.symblRec(None, 5, 0, 'I')
+        self.symDict['X'] = self.symblRec(None, 10, 3, 'I')
+        self.symDict['L'] = self.symblRec(None, 50, 0, 'X')
+        self.symDict['C'] = self.symblRec(None, 100, 3, 'X')
+        self.symDict['D'] = self.symblRec(None, 500, 0, 'C')
+        self.symDict['M'] = self.symblRec(None, 1000, 3, 'C')
+        
+    def subs(self, stringInput, symbolInst):
+        
+        if not self.symDict.has_key(symbolInst):
+            print "Foriegn key : ", symbolInst
+            return None
+        self.symDict[symbolInst] = self.symDict[symbolInst]._replace(name=stringInput)
 
-class Greedy:
-
-    def __init__(self, Dict):
-        self.DictDiff = {}
-        self.DictRatio = {}
-        self.Schedule(Dict)
-        # print self.DictRatio
-        self.DescDiff = self.DictDiff.keys()
-        self.DescDiff.sort(reverse=True)
-        self.DescRatio = self.DictRatio.keys()
-        self.DescRatio.sort(reverse=True)
-        print self.DictDiff
-        print self.DictRatio
-        self.Compute()
-
-    def Compute(self):
-        # Diff first
-        print self.DescDiff
-        print self.DescRatio
-
-        # Conputing DIFF
-        DiffSum = 0
-        DiffLength = 0
-        for value in self.DescDiff:
-            weights = self.DictDiff[value]
-            if (len(weights) > 1):
-                weights.sort(reverse=True)
-            print "Value: ", value
-            for weight in weights:
-                # print "\tLength = ", DiffLength, " + ", weight, " - ", value, "\n"
-                DiffLength += (weight - value)
-                print "\tDiffSum = ", DiffSum," + (", weight," x ", DiffLength, ")"
-                DiffSum += (weight * DiffLength)
-
-        print "DIFF result: ", DiffSum,"\n"
-
-        # for Ratio
-        RatioLength = 0
-        RatioSum = 0
-        weights = []
-        for value in self.DescRatio:
-            weights = self.DictRatio[value]
-
-            if (len(weights) > 1):
-                weights.sort(reverse=True)
-            print "Value: ", value
-            for weight in weights:
-                RatioLength += int(weight/value)
-                print "\tRatioSum = ", RatioSum," + (", weight," x ", RatioLength, ")"
-                RatioSum += (weight * RatioLength)
-
-        print "RATIO result: ", RatioSum,"\n"
-
-    def Schedule(self, Dict):
-        for entry in Dict.keys():
-            weight = Dict[entry][0]
-            length = Dict[entry][1]
-            Diffvalue = weight - length
-            Ratiovalue = float(weight) / float(length)
-
-            # print "Weight: ",weight,", Length: ", length,",DiffValue: ",Diffvalue
-            if not self.DictRatio.has_key(Ratiovalue):
-                self.DictRatio[Ratiovalue] = []
-                self.DictRatio[Ratiovalue].append(weight)
-            elif weight > self.DictRatio[Ratiovalue][0]:
-                self.DictRatio[Ratiovalue].insert(0,weight)
-            else:
-                self.DictRatio[Ratiovalue].append(weight)
-
-            if not self.DictDiff.has_key(Diffvalue):
-                self.DictDiff[Diffvalue] = []
-                self.DictDiff[Diffvalue].append(weight)
-            elif weight > self.DictDiff[Diffvalue][0]:
-                self.DictDiff[Diffvalue].insert(0,weight)
-            else:
-                self.DictDiff[Diffvalue].append(weight)
+        self.nameDict[stringInput] = symbolInst
 
 
+class Parser:
+    def __init__(self):
+        self.repeatSymbolCount = {}
 
+    def lexical_parser(self, inputList, symbolInstance):
+        print "InputString is ", inputList
+        for inputString in inputList:
+            mylist = []
+            if inputString is not None:
+                mylist = inputString.split(' is ')
 
+            symbolInstance.subs(mylist[0], mylist[1])
+
+        
 
 if __name__ == "__main__":
-    InputGraph = open(argv[-1])
-    MasterDict = {}
+   # Hard-coding known values
 
-    Count = int(InputGraph.readline())
+   Test = Symbols()
 
-    for Input in InputGraph.readlines():
-        Count -= 1
-        weight, length = Input.split()
-        temp = []
-        temp.append(int(weight))
-        temp.append(int(length))
-        MasterDict[Count] = temp
+   Test.subs("Mozart", 'D')
 
+   myParse = Parser()
+   
+   fin = sys.stdin.readlines()
+   myParse.lexical_parser(fin, Test)
+   
+   print Test.symDict
 
-
-    Test = Greedy(MasterDict)
+</code>
